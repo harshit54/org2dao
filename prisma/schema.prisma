@@ -3,61 +3,95 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+enum UserTypeEnum {
+  INVESTOR
+  COMPANY_REP
+  ADMIN
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(255)
+  createdAt  DateTime     @default(now()) @db.Timestamp(6)
+  userType   UserTypeEnum
+  investor   Investor?
+  companyRep CompanyRep?
+  admin      Admin?
+}
+
+model Investor {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
+  companies Company[]
+}
+
+model CompanyRep {
   id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  content   String?
-  published Boolean  @default(false)
-  authorId  Int
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+  companyId Int
+  company   Company?
 }
 
-model investor {
-  id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  content   String?
-  published Boolean  @default(false)
+model Admin {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
 }
 
-model company_rep {
-  id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  content   String?
-  published Boolean  @default(false)
+model Company {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(255)
+  createdAt    DateTime   @default(now()) @db.Timestamp(6)
+  category     String     @db.VarChar(255)
+  description  String     @db.Text()
+  investors    Investor[]
+  companyRepId Int        @unique
+  companyRep   CompanyRep @relation(fields: [companyRepId], references: [id])
+  events       Event[]
 }
 
-model admin {
-  id          Int        @id @default(autoincrement())
-  title       String     @db.VarChar(255)
-  createdAt   DateTime   @default(now()) @db.Timestamp(6)
-  content     String?
-  published   Boolean    @default(false)
+model Event {
+  id            Int          @id @default(autoincrement())
+  companyId     Int
+  company       Company      @relation(fields: [companyId], references: [id])
+  startDateTime DateTime     @default(now())
+  endDateTime   DateTime
+  resolutions   Resolution[]
 }
 
-model company {
-  id            Int      @id @default(autoincrement())
-  name          String   @db.VarChar(255)
-  createdAt     DateTime @default(now()) @db.Timestamp(6)
-  category      String   @db.VarChar(255)
-  description   String   
+enum ResolutionCategoryEnum {
+  APPROVAL
+  APPOINTMENT
 }
 
-// model event {
-//   id        Int      @id @default(autoincrement())
-//   date
-//   time
-//   till
-//   company_id
-// }
+enum ResolutionTypeEnum {
+  SPECIAL
+  ORDINARY
+}
 
-// model resolution {
-//   id                 Int      @id @default(autoincrement())
-//   event_id
-//   category
-//   type               String   @db.VarChar(255)
-//   appointee_name     String   @db.VarChar(255)
-//   approval_type
-//   votes
-// }
+model Resolution {
+  id                    Int                     @id @default(autoincrement())
+  eventId               Int
+  event                 Event                   @relation(fields: [eventId], references: [id])
+  category              ResolutionCategoryEnum
+  type                  ResolutionTypeEnum
+  appointee_name        String?                 @db.VarChar(255)
+  votes                 Int
+  AppointmentResolution AppointmentResolution[]
+  ApprovalResolution    ApprovalResolution[]
+}
+
+model AppointmentResolution {
+  id            Int        @id @default(autoincrement())
+  resolutionId  Int
+  resolution    Resolution @relation(fields: [resolutionId], references: [id])
+  appointeeName String     @db.VarChar(255)
+}
+
+model ApprovalResolution {
+  id           Int        @id @default(autoincrement())
+  resolutionId Int
+  resolution   Resolution @relation(fields: [resolutionId], references: [id])
+}

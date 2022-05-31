@@ -1,4 +1,4 @@
-Currently work in progres.
+Currently work in progress.
 # Tech Stack
 - Next.js
 - Prisma (ORM)

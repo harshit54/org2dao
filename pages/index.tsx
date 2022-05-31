@@ -1,10 +1,4 @@
-import NavBar from "../common/components/NavBar";
-import ResolutionDetailsCard from "../common/components/ResolutionDetailsCard";
-import HomePageUser from "./userhomepage";
-import { useState } from "react";
-import LoginCard from "../common/components/LoginCard";
-import LoginButton from "../common/components/LoginButton";
-import LogoutButton from "../common/components/LogoutButton";
+import Link from "next/link";
 
 import Head from "next/head";
 import {
@@ -21,7 +15,7 @@ import {
 
 export default function IndexPage() {
 	return (
-		<>
+		<div>
 			<Head>
 				<link
 					href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap"
@@ -43,12 +37,13 @@ export default function IndexPage() {
 					>
 						Start Making Decisions for <br />
 						<Text as={"span"} color={"green.400"}>
-							your Stocks
+							Your Stocks
 						</Text>
 					</Heading>
 					<Text color={"gray.500"}>
 						Now be on the forefront of all the decisions taken by your investees
-						and vote using the new-age transparency first, decentralized, Blockchain based voting system.
+						and vote using the new-age transparency first, decentralized,
+						Blockchain based voting system.
 					</Text>
 					<Stack
 						direction={"column"}
@@ -57,7 +52,9 @@ export default function IndexPage() {
 						alignSelf={"center"}
 						position={"relative"}
 					>
-						<LoginButton />
+						<Link href="/investor">
+							<Button colorScheme={"green"}>Log In</Button>
+						</Link>
 						<Button variant={"link"} colorScheme={"blue"} size={"sm"}>
 							Learn more
 						</Button>
@@ -84,7 +81,7 @@ export default function IndexPage() {
 					</Stack>
 				</Stack>
 			</Container>
-		</>
+		</div>
 	);
 }
 

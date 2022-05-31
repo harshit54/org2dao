@@ -33,11 +33,7 @@ export default function ResolutionDetailsCard(props: ResolutionProps) {
 		CategoryDetails = <AppointmentCategoryDetails />;
 	}
 	return (
-		<Flex
-			minH={"100vh"}
-			align={"center"}
-			justify={"center"}
-		>
+		<Flex minH={"50vh"} align={"center"} justify={"center"}>
 			<Stack spacing={5} mx={"auto"} py={12} px={6}>
 				<Stack>
 					<Heading fontSize={"3xl"} textAlign={"center"}>
@@ -64,9 +60,6 @@ export default function ResolutionDetailsCard(props: ResolutionProps) {
 					</Box>
 					{CategoryDetails}
 				</Box>
-				<Button colorScheme={"red"} width="50%" alignSelf={"center"}>
-					Delete
-				</Button>
 			</Stack>
 		</Flex>
 	);

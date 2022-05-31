@@ -15,8 +15,10 @@ import {
 	Stack,
 	useColorMode,
 	Center,
+	Text,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import LogoutButton from "./LogoutButton";
 
 const NavLink = ({ children }: { children: ReactNode }) => (
 	<Link
@@ -33,20 +35,25 @@ const NavLink = ({ children }: { children: ReactNode }) => (
 	</Link>
 );
 
-export default function NavBar() {
+interface NavBarProps {
+	name: string;
+	companyName: string;
+}
+
+export default function NavBar(props: NavBarProps) {
 	const { colorMode, toggleColorMode } = useColorMode();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	return (
-		<>
+		<div>
 			<Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
 				<Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-					<Box>Logo</Box>
+					<Box>Org2Dao</Box>
 
 					<Flex alignItems={"center"}>
 						<Stack direction={"row"} spacing={7}>
-							<Button onClick={toggleColorMode}>
-								{colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-							</Button>
+							<Text>
+								{props.name}, {props.companyName}
+							</Text>
 
 							<Menu>
 								<MenuButton
@@ -77,13 +84,16 @@ export default function NavBar() {
 									<MenuDivider />
 									<MenuItem>Your Servers</MenuItem>
 									<MenuItem>Account Settings</MenuItem>
-									<MenuItem>Logout</MenuItem>
+									{/* <MenuItem>
+										<LogoutButton />
+									</MenuItem> */}{" "}
+									{/*FIXME: Hydration problem?*/}
 								</MenuList>
 							</Menu>
 						</Stack>
 					</Flex>
 				</Flex>
 			</Box>
-		</>
+		</div>
 	);
 }

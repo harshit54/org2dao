@@ -6,7 +6,7 @@ const LogoutButton = () => {
 
 	return (
 		<Button
-			colorScheme="green"
+			colorScheme="red"
 			maxW="100"
 			alignSelf={"center"}
 			onClick={() => logout({ returnTo: window.location.origin })}
